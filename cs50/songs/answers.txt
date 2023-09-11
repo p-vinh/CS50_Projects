@@ -1,0 +1,7 @@
+If songs.db contains the top 100 songs of one listener from 2018, how would you characterize their audio aura?
+
+Using sql I can use their top 3 and calculate their mood using the energy, tempo, and the other characteristics of the song.
+
+
+Hypothesize about why the way you’ve calculated this aura might not be very representative of the listener. What better ways of calculating this aura would you propose?
+This may not represent the listner because maybe their song taste moved to something else. I propose that we can look at the most frequent songs they've listened to recently and compare it to their old audio aura so that we can calculate the audio aura this way.
