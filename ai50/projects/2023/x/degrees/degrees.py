@@ -55,8 +55,8 @@ def load_data(directory):
 def main():
     if len(sys.argv) > 2:
         sys.exit("Usage: python degrees.py [directory]")
-    # directory = sys.argv[1] if len(sys.argv) == 2 else "large"
-    directory = "ai50\\projects\\2023\\x\\degrees\\small"
+    directory = sys.argv[1] if len(sys.argv) == 2 else "large"
+    
     # Load data from files into memory
     print("Loading data...")
     load_data(directory)
@@ -104,18 +104,24 @@ def shortest_path(source, target):
         # Remove a node from the queue
         node = frontier.remove()
         
-        if node == target:
+        # If node is the goal, then we have a solution
+        if node.state == target:
             path = []
+
+            # Follow the parent nodes to get the path
             while node.parent is not None:
                 path.append((node.action, node.state))
                 node = node.parent
             path.reverse()
             return path
-        explored.add(node)
+        # Otherwise, add node to explored set, we add the person_id since it is unique
+        explored.add(node.state)
         
+        # Add neighbors to frontier, neighbors are people who starred in the same movie, but not yet explored
+        # The Node contains, state (person_id), parent (previous node), action (movie_id)
         for movie_id, person_id in neighbors_for_person(node.state):
             if not frontier.contains_state(person_id) and person_id not in explored:
-                frontier.add(Node(person_id, node.state, neighbors_for_person(person_id)))
+                frontier.add(Node(person_id, node, movie_id))
 
     return None
 
