@@ -100,7 +100,7 @@ def shortest_path(source, target):
     # Create a set to keep track of explored nodes
     explored = set()
     
-    while True:
+    while frontier.empty() == False:
         # Remove a node from the queue
         node = frontier.remove()
         
@@ -114,6 +114,7 @@ def shortest_path(source, target):
                 node = node.parent
             path.reverse()
             return path
+        
         # Otherwise, add node to explored set, we add the person_id since it is unique
         explored.add(node.state)
         
@@ -121,7 +122,17 @@ def shortest_path(source, target):
         # The Node contains, state (person_id), parent (previous node), action (movie_id)
         for movie_id, person_id in neighbors_for_person(node.state):
             if not frontier.contains_state(person_id) and person_id not in explored:
-                frontier.add(Node(person_id, node, movie_id))
+                child = Node(state=person_id, parent=node, action=movie_id)
+                
+                if (child.state == target):
+                    path = []
+                    
+                    while child.parent is not None:
+                        path.append((child.action, child.state))
+                        child = child.parent
+                    path.reverse()
+                    return path
+                frontier.add(child)
 
     return None
 
