@@ -3,6 +3,7 @@ Tic Tac Toe Player
 """
 
 import math
+import copy
 
 X = "X"
 O = "O"
@@ -13,7 +14,7 @@ def initial_state():
     """
     Returns starting state of the board.
     """
-    return [[X, X, X],
+    return [[EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY],
             [EMPTY, EMPTY, EMPTY]]
 
@@ -41,10 +42,11 @@ def result(board, action):
     Returns the board that results from making move (i, j) on the board.
     """
     i, j = action
-    if (board[i][j] == EMPTY):
-        board[i][j] = player(board)
+    copyboard = copy.deepcopy(board)
+    if (copyboard[i][j] == EMPTY):
+        copyboard[i][j] = player(board)
     
-    return board
+    return copyboard
         
 def winner(board):
     """
