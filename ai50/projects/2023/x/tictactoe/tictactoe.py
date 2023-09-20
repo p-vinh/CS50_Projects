@@ -32,77 +32,126 @@ def actions(board):
     """
     Returns set of all possible actions (i, j) available on the board.
     """
-    return {(i, j)
-            for i in range(len(board))
-                for j in range(len(board[i]))
-                    if board[i][j] == EMPTY }
+    possibleactions = set()
+    for i, row in enumerate(board):
+        for j, cell in enumerate(row):
+            if cell == EMPTY:
+                possibleactions.add((i, j))
+    return possibleactions
 
 def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
-    i, j = action
-    copyboard = copy.deepcopy(board)
-    if (copyboard[i][j] == EMPTY):
-        copyboard[i][j] = player(board)
+    if action not in actions(board):
+        raise Exception("Invalid action")
     
+    copyboard = copy.deepcopy(board)
+    copyboard[action[0]][action[1]] = player(copyboard)
+
     return copyboard
-        
+
 def winner(board):
     """
     Returns the winner of the game, if there is one.
     """
-    # Horizontally
-    for row in board:
-        if all(cell == X for cell in row):
+    wins = [[(0, 0), (0, 1), (0, 2)],
+            [(1, 0), (1, 1), (1, 2)],
+            [(2, 0), (2, 1), (2, 2)],
+            [(0, 0), (1, 0), (2, 0)],
+            [(0, 1), (1, 1), (2, 1)],
+            [(0, 2), (1, 2), (2, 2)],
+            [(0, 0), (1, 1), (2, 2)],
+            [(0, 2), (1, 1), (2, 0)]]
+
+    for win in wins:
+        numOfX = 0
+        numOfO = 0
+        for i, j in win:
+            if board[i][j] == X:
+                numOfX += 1
+            if board[i][j] == O:
+                numOfO += 1
+        if numOfX == 3:
             return X
-        elif all(cell == O for cell in row):
+        if numOfO == 3:
             return O
-                    
-    # Vertically
-    for col in range(3):
-        if (row[col] == X for row in board):
-            return X
-        elif (row[col] == O for row in board):
-            return O
+
     
-    # Diagional
-    if all(board[i][i] == X for i in range(3)):
-        return X
-    elif all(board[i][i] == O for i in range(3)):
-        return O
-    
-    if all(board[i][2 - i] == X for i in range(3)):
-        return X
-    elif all(board[i][2 - i] == O for i in range(3)):
-        return O
+    return None
 
 def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
-    raise NotImplementedError
-
+    if winner(board) is not None or not actions(board):
+        return True
+    else:
+        return False
 
 def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
-    raise NotImplementedError
+
+    winnerplayer = winner(board)
+    
+    if winnerplayer == X:
+        return 1
+    elif winnerplayer == O:
+        return -1
+    else:
+        return 0
 
 
 def minimax(board):
     """
     Returns the optimal action for the current player on the board.
-    """
-    raise NotImplementedError
-
-
-def test():
-    board = initial_state()
-    # for i in range(3):
-    #     for j in range(3):
-    #         print(result(board, (i, j)))
-    print(winner(board))
+    """ 
     
-test()
+    if terminal(board):
+        return None
+    
+    
+    if player(board) == X:
+        v = -math.inf
+        
+        for action in actions(board):
+            minval = minvalue(result(board, action))
+            if minval > v:
+                v = minval
+                bestaction = action
+
+    elif player(board) == O:
+        v = math.inf
+
+        for action in actions(board):
+            maxval = maxvalue(result(board, action))
+            if maxval < v:
+                v = maxval
+                bestaction = action
+        
+        return bestaction
+    
+    
+def maxvalue(board):
+    if terminal(board):
+        return utility(board)
+    
+    v = -math.inf
+    
+    for action in actions(board):
+        v = max(v, minvalue(result(board, action)))
+    
+    return v
+
+def minvalue(board):
+    if terminal(board):
+        return utility(board)
+    
+    v = math.inf
+    
+    for action in actions(board):
+        v = min(v, maxvalue(result(board, action)))
+        
+    return v
