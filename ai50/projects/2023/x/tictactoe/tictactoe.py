@@ -104,7 +104,7 @@ def utility(board):
         return 0
 
 
-def minimax(board):
+def minimax(board, depth=5, alpha=-math.inf, beta=math.inf):
     """
     Returns the optimal action for the current player on the board.
     """ 
