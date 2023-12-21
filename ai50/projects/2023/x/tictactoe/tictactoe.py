@@ -112,7 +112,6 @@ def minimax(board, depth=5, alpha=-math.inf, beta=math.inf):
     if terminal(board):
         return None
     
-    
     if player(board) == X:
         v = -math.inf
         
@@ -121,6 +120,7 @@ def minimax(board, depth=5, alpha=-math.inf, beta=math.inf):
             if minval > v:
                 v = minval
                 bestaction = action
+        return bestaction
 
     elif player(board) == O:
         v = math.inf
