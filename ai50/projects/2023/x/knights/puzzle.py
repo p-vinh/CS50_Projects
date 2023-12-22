@@ -70,7 +70,7 @@ knowledge3 = And(
     # B is a knight if and only if A is a knave
     Biconditional(BKnight, Biconditional(AKnight, AKnave)), # B is a knight if and only if (A is a knight if and only if A is not a knave)
     Biconditional(BKnight, CKnave), # B is a knight if and only if C is a knave
-    Biconditional(CKnight, AKnight) # C is a knight if and only if A is a knight
+    Biconditional(CKnight, AKnight) # C is a knight if and only if A is a knight    
 )
 
 
