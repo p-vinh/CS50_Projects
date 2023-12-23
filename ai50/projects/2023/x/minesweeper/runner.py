@@ -215,6 +215,8 @@ while True:
     if move:
         if game.is_mine(move):
             lost = True
+            for sentence in ai.knowledge:
+                print(sentence.__str__())
         else:
             nearby = game.nearby_mines(move)
             revealed.add(move)
