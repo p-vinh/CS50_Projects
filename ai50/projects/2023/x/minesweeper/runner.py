@@ -19,7 +19,7 @@ size = width, height = 600, 400
 screen = pygame.display.set_mode(size)
 
 # Fonts
-OPEN_SANS = "ai50\\projects\\2023\\x\\minesweeper\\assets\\fonts\\OpenSans-Regular.ttf"
+OPEN_SANS = "assets/fonts/OpenSans-Regular.ttf"
 smallFont = pygame.font.Font(OPEN_SANS, 20)
 mediumFont = pygame.font.Font(OPEN_SANS, 28)
 largeFont = pygame.font.Font(OPEN_SANS, 40)
@@ -32,9 +32,9 @@ cell_size = int(min(board_width / WIDTH, board_height / HEIGHT))
 board_origin = (BOARD_PADDING, BOARD_PADDING)
 
 # Add images
-flag = pygame.image.load("ai50\\projects\\2023\\x\\minesweeper\\assets\\images\\flag.png")
+flag = pygame.image.load("assets/images/flag.png")
 flag = pygame.transform.scale(flag, (cell_size, cell_size))
-mine = pygame.image.load("ai50\projects\\2023\\x\\minesweeper\\assets\\images\\mine.png")
+mine = pygame.image.load("assets/images/mine.png")
 mine = pygame.transform.scale(mine, (cell_size, cell_size))
 
 # Create game and AI agent
@@ -183,7 +183,6 @@ while True:
             move = ai.make_safe_move()
             if move is None:
                 move = ai.make_random_move()
-                print(move)
                 if move is None:
                     flags = ai.mines.copy()
                     print("No moves left to make.")
@@ -215,8 +214,6 @@ while True:
     if move:
         if game.is_mine(move):
             lost = True
-            for sentence in ai.knowledge:
-                print(sentence.__str__())
         else:
             nearby = game.nearby_mines(move)
             revealed.add(move)
